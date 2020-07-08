@@ -1,0 +1,17 @@
+export const propertyToPrefix: { [key: string]: string } = {
+  display: 'dp',
+  position: 'pos',
+  'text-align': 'text',
+  'font-weight': 'font',
+  'background-color': 'bg',
+  color: 'text',
+  'grid-template-columns': 'cols',
+  'grid-column': 'col',
+  'grid-column-start': 'col-start',
+  'grid-column-end': 'col-end',
+  'grid-column-gap': 'col-gap',
+  'min-width': 'mw',
+  width: 'w',
+  'min-height': 'mh',
+  h: 'h',
+}
