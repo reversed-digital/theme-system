@@ -32,6 +32,10 @@
   "name": "theme-system",
   "author": "Corjen Moll",
   "module": "dist/linaria-system.esm.js",
+  "repository": {
+    "url": "https://github.com/reversed-digital/theme-system",
+    "type": "git"
+  },
   "devDependencies": {
     "husky": "^4.2.5",
     "prettier": "^2.0.5",
