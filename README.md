@@ -1,10 +1,10 @@
 # Theme System
 
-> *Note:* This is not production ready
+> _Note:_ This is not production ready
 
-At [Reversed](https://www.thinkreversed.com) we make heavy use of both styled-components and styled-system. It offers a great DX but comes at a cost, since each `Box` component and `styled.div` call is adding bytes to the JS bundle and these styles are inserted during runtime. We've looked fo alternatives and found [Linaria](https://linaria.now.sh/) which looks great. It's mainly the same API as styled-components, but extracts styles to static css. On the other hand we've looked at [https://tailwindcss.com/](https://tailwindcss.com/), which is gaining a lot of attention and rightfully so.
+At [Reversed](https://www.thinkreversed.com) we make heavy use of both styled-components and styled-system. It offers a great DX but comes at a cost, since each `Box` component and `styled.div` call is adding bytes to the JS bundle and these styles are inserted during runtime. We've looked for alternatives and found [Linaria](https://linaria.now.sh/) which looks great. It's mainly the same API as styled-components, but extracts styles to static css. On the other hand we've looked at [https://tailwindcss.com/](https://tailwindcss.com/), which is gaining a lot of attention and rightfully so.
 
-We didn't want to lose our `Box` component though. So we've build *Theme System* (name suggestions  welcome). Theme-System combines best of both worlds, e.g. utility-clases for maximum reusability but with the DX of styled-system props.
+We didn't want to lose our `Box` component though. So we've build _Theme System_ (name suggestions welcome). Theme-System combines best of both worlds, e.g. utility-clases for maximum reusability but with the DX of styled-system props.
 
 ## How it works
 
@@ -15,7 +15,7 @@ First step: generating utility classes.
 The `generate` function accepts a theme object it this form:
 
 ```typescript
-import {generate} from 'theme-system'
+import { generate } from 'theme-system'
 
 type Theme = {
   breakpoints: { [key: string]: string | number }
@@ -29,9 +29,9 @@ type Theme = {
 When run, `generate` will return an object of utility classes based on the values in your theme. You can use this object as a global style with any css-in-js library that supports object style css. For example, with Linaria you can do this:
 
 ```typescript
-import {css} from 'linaria'
-import {generate} from 'theme-system'
-import {theme} from './theme'
+import { css } from 'linaria'
+import { generate } from 'theme-system'
+import { theme } from './theme'
 
 export default css`
   :global() {
@@ -49,7 +49,7 @@ Then just import this file once in your application and if your bundler is setup
 The parsers are the other half of Theme System. It maps specific props of a component to the utility classes based on your theme. By using generics we have type safety on every available property. Here is an example of a `Box` component:
 
 ```typescript
-import { cx } from "linaria";
+import { cx } from 'linaria'
 import {
   BackgroundColorProps,
   FlexProps,
@@ -65,21 +65,17 @@ import {
   position,
   space,
   typography,
-} from "theme-system";
-import { theme, Theme } from "./theme";
+} from 'theme-system'
+import { theme, Theme } from './theme'
 
-type Props = Omit<HTMLAttributes<HTMLElement>, "color"> &
+type Props = Omit<HTMLAttributes<HTMLElement>, 'color'> &
   PositionProps &
-  SpaceProps<Theme["space"]> &
+  SpaceProps<Theme['space']> &
   LayoutProps &
-  TypographyProps<
-    Theme["fontFamilies"],
-    Theme["fontWeights"],
-    Theme["colors"]
-  > &
-  BackgroundColorProps<Theme["colors"]> &
+  TypographyProps<Theme['fontFamilies'], Theme['fontWeights'], Theme['colors']> &
+  BackgroundColorProps<Theme['colors']> &
   FlexProps &
-  GridProps<Theme["space"]>;
+  GridProps<Theme['space']>
 
 const Box: FC<Props> = ({ children, className, ...rest }) => {
   const classNames = [
@@ -90,11 +86,11 @@ const Box: FC<Props> = ({ children, className, ...rest }) => {
     ...position(rest, theme),
     ...space(rest, theme),
     ...typography(rest, theme),
-  ];
-  return <div className={cx(...classNames, className)}>{children}</div>;
-};
+  ]
+  return <div className={cx(...classNames, className)}>{children}</div>
+}
 
-export default Box;
+export default Box
 ```
 
 > To ensure type safety, make sure you export the type of your Theme like so: `export type Theme = typeof theme`
@@ -103,7 +99,7 @@ Given that `theme.ratio["0"]` exists using `<Box mt="0"></Box>` would render `<d
 
 ### Media queries
 
-Equal to styled-system you can use media queries like so: `<Box mt={{_: "0", lg: "2"}}/>`. Use the `_`  key for your initial styles, the following keys (like `lg`) has to match the keys of `theme.breakpoints`. You'll receive a warning  in development if it doens't.
+Equal to styled-system you can use media queries like so: `<Box mt={{_: "0", lg: "2"}}/>`. Use the `_` key for your initial styles, the following keys (like `lg`) has to match the keys of `theme.breakpoints`. You'll receive a warning in development if it doens't.
 
 ## Contributing
 
