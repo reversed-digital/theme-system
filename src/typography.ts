@@ -48,13 +48,13 @@ export const generate = (theme: Theme): CSSProperties => {
 
 export function parse(props: any, theme: Theme): string[] {
   if (props.fontWeight) {
-    return parseClassNames('fontWeight', props.fontWeight, theme)
+    return parseClassNames('font-weight', props.fontWeight, theme)
   }
   if (props.fontFamily) {
-    return parseClassNames('fontFamily', props.fontFamily, theme)
+    return parseClassNames('font-family', props.fontFamily, theme)
   }
   if (props.textAlign) {
-    return parseClassNames('textAlign', props.textAlign, theme)
+    return parseClassNames('text-align', props.textAlign, theme)
   }
   if (props.color) {
     return parseClassNames('color', props.color, theme)
