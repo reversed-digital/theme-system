@@ -103,7 +103,11 @@ Equal to styled-system you can use media queries like so: `<Box mt={{_: "0", lg:
 
 ### Filter props
 
+<<<<<<< HEAD
 To prevent props being passed on to the DOM you can use the `filterProps` utility, which will remove any theme-system props from a props object.
+=======
+To prevent props being passed on to the DOM you can use the `filterProps` utility, this will remove any theme-system props from a props object.
+>>>>>>> 02950437f4ce2f1a542a3f7cb782b9b1005429b3
 
 ```typescript
 import {filterProps} from 'theme-system'
