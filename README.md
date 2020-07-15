@@ -101,6 +101,32 @@ Given that `theme.ratio["0"]` exists using `<Box mt="0"></Box>` would render `<d
 
 Equal to styled-system you can use media queries like so: `<Box mt={{_: "0", lg: "2"}}/>`. Use the `_` key for your initial styles, the following keys (like `lg`) has to match the keys of `theme.breakpoints`. You'll receive a warning in development if it doens't.
 
+### Filter props
+
+To prevent props being passed on to the DOM you can use the `filterProps` utility, which will remove any theme-system props from a props object.
+
+```typescript
+import {filterProps} from 'theme-system'
+
+const Text: FC<Props> = ({
+  children,
+  className,
+  ...rest
+}) => {
+  const classNames = [
+    ...space(rest, theme),
+    ...typography(rest, theme),
+    className
+  ];
+
+  return (
+    <p className={cx(...classNames)} {...filterProps(rest)}>
+      {children}
+    </p>
+  );
+};
+```
+
 ## Contributing
 
 Note that this is expiremtal but ideas and pr's are welcome. Theme System is based on [TSDX](https://github.com/formik/tsdx), check that out if you'd like to contribute.
