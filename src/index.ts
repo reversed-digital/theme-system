@@ -15,6 +15,7 @@ export { parse as layout } from './layout'
 export { parse as position } from './position'
 export { parse as grid } from './grid'
 export { parse as space } from './space'
+export { filterProps } from './filter-props'
 export * from './types'
 
 export const generator = (theme: any) => {
