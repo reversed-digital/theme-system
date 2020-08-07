@@ -3,32 +3,7 @@ import {
   generateClassNamesFromObject,
 } from './lib/generate-class-names'
 import { parseClassNames } from './lib/parse-class-names'
-import { GridColumnProperty, GridTemplateColumnsProperty, Theme } from './types'
-
-const gridTemplates: GridTemplateColumnsProperty[] = [
-  '1',
-  '2',
-  '3',
-  '4',
-  '5',
-  '6',
-  '7',
-  '8',
-  '9',
-  '10',
-  '11',
-  '12',
-  'none',
-]
-
-let gridTemplateObject = {}
-for (const key of gridTemplates) {
-  if (key === 'none') {
-    gridTemplateObject[key] = 'none'
-  } else {
-    gridTemplateObject[key] = `repeat(${key}, minmax(0, 1fr))`
-  }
-}
+import { GridColumnProperty, Theme } from './types'
 
 const gridColumn: GridColumnProperty[] = [
   '1',
@@ -57,16 +32,6 @@ for (const key of gridColumn) {
 
 export const generate = (theme: Theme): string => {
   let styles = `
-  ${generateClassNamesFromObject({
-    property: 'grid-template-columns',
-    values: gridTemplateObject,
-    breakpoints: theme.breakpoints,
-  })}
-${generateClassNamesFromObject({
-  property: 'grid-column-gap',
-  values: theme.space,
-  breakpoints: theme.breakpoints,
-})}
 ${generateClassNamesFromObject({
   property: 'grid-column',
   values: gridColumnObject,
@@ -88,12 +53,6 @@ ${generateClassNamesFromArray({
 
 export function parse(props: any, theme: Theme): string {
   let classNames = ''
-  if (props.gridTemplateColumns) {
-    classNames += parseClassNames('grid-template-columns', props.gridTemplateColumns, theme) + ' '
-  }
-  if (props.gridColumnGap) {
-    classNames += parseClassNames('grid-column-gap', props.gridColumnGap, theme) + ' '
-  }
   if (props.gridColumnStart) {
     classNames += parseClassNames('grid-column-start', props.gridColumnStart, theme) + ' '
   }

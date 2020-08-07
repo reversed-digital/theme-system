@@ -1,22 +1,24 @@
 # Theme System
 
-> _Note:_ This is not production ready
+Theme system is a libary that combines the benefits of utility class libraries like [https://tailwindcss.com/](https://tailwindcss.com/) with the DX of css-in-js libraries like Styled Components or Emotion combined with styled-system.
 
 At [Reversed](https://www.thinkreversed.com) we make heavy use of both styled-components and styled-system. It offers a great DX but comes at a cost, since each `Box` component and `styled.div` call is adding bytes to the JS bundle and these styles are inserted during runtime. We've looked for alternatives and found [Linaria](https://linaria.now.sh/) which looks great. It's mainly the same API as styled-components, but extracts styles to static css. On the other hand we've looked at [https://tailwindcss.com/](https://tailwindcss.com/), which is gaining a lot of attention and rightfully so.
 
-We didn't want to lose our `Box` component though. So we've build _Theme System_ (name suggestions welcome). Theme-System combines best of both worlds, e.g. utility-clases for maximum reusability but with the DX of styled-system props.
+We didn't want to lose our `Box` component though and wanted the freedom of our own design system. So we've build _Theme System_. Theme-System combines best of both worlds; it creates a fixed set of utility-clases for maximum reusability but with the DX of styled-system props.
 
-## How it works
+## How to install
 
-First step: generating utility classes.
+Run `yarn add theme-system@next`
 
-### Generate
+## Get started
 
-The `generate` function accepts a theme object it this form:
+For a working example with next.js & linaria, please check the examples folder.
+
+Create a theme system config file, for example `theme-system.ts`, inside this file, create the utility classes and parser using `createThemeSystem` function. The `createThemeSystem` function accepts a single theme object and return an object with three properties.
+
+Your theme object should look like this:
 
 ```typescript
-import { generate } from 'theme-system'
-
 type Theme = {
   breakpoints: { [key: string]: string | number }
   fontWeights: { [key: string]: string | number }
@@ -26,106 +28,176 @@ type Theme = {
 }
 ```
 
-When run, `generate` will return an object of utility classes based on the values in your theme. You can use this object as a global style with any css-in-js library that supports object style css. For example, with Linaria you can do this:
-
 ```typescript
-import { css } from 'linaria'
-import { generate } from 'theme-system'
-import { theme } from './theme'
+// theme-system.ts
+const theme = {
+  breakpoints: {
+    md: '1024px',
+  },
+  fontWeights: {
+    regular: '400',
+  },
+  fontSizes: {
+    large: '3rem',
+    regular: '1rem',
+  },
+  fontFamilies: {
+    heading: 'serif',
+    body: 'sans-serif',
+  },
+  space: {
+    '0': 0,
+    '1': '1rem',
+    '2': '2rem',
+  },
+  colors: {
+    primary: '#236FEA',
+    info: '#258AE7',
+    success: '#27C62D',
+  },
+}
 
-export default css`
-  :global() {
-    ${generate(theme)}
-  }
-`
+export type Theme = typeof theme
+
+export const { utilities, parse, parseAll } = createThemeSystem<Theme>(theme)
 ```
 
-Then just import this file once in your application and if your bundler is setup right, you'll have list of utility classes in an external css file.
+The `utilities` property is a string containing the css with the utility classes, you should add this once inside your global css.
 
-> The amount of properties is limited and based on our most used ones, keeping the css file slim. They could be extended in the future.
+The `parse` & `parseAll` functions are identical in implementation, but `parse` is strictly typed based on your theme and `parseAll` is loosely typed.
 
-### Parsins
+## parse example
 
-The parsers are the other half of Theme System. It maps specific props of a component to the utility classes based on your theme. By using generics we have type safety on every available property. Here is an example of a `Box` component:
+The parse function allows you to generate a string of classnames based on your theme which you can use anywhere in your code. Each property can be one of the values of that property in your theme (e.g. `color: 'primary'`) or an object with one of your breakpoint keys as the key, or `_` for the initial style. For example:
+
+```jsx
+<p
+  className={parse({
+    color: 'primary',
+    fontSize: 'large',
+    fontFamily: {
+      _: 'body',
+      md: 'heading',
+    },
+  })}
+>
+  Using parse
+</p>
+```
+
+Renders this HTML:
+
+```html
+<p class="font-family-body md-font-family-heading font-size-large color-primary">Using parse</p>
+```
+
+The `parse` function is strictly typed, so passing in invalid properties will result in a typescript.
+
+## parseAll example
+
+The `parseAll` function allows you to pass in a props object without strict type checking. This allows you to build custom components with typechecking on their props and passing a complete props object to `parseAll`, generating the right class names. A Box component example:
 
 ```typescript
+import React, { FC, HTMLAttributes } from 'react'
+import { ThemeSystemProps, filterProps } from 'theme-system'
+import { Theme, parseAll } from '../lib/theme-system'
 import { cx } from 'linaria'
-import {
-  BackgroundColorProps,
-  FlexProps,
-  GridProps,
-  LayoutProps,
-  PositionProps,
-  SpaceProps,
-  TypographyProps,
-  bg,
-  flex,
-  grid,
-  layout,
-  position,
-  space,
-  typography,
-} from 'theme-system'
-import { theme, Theme } from './theme'
 
-type Props = Omit<HTMLAttributes<HTMLElement>, 'color'> &
-  PositionProps &
-  SpaceProps<Theme['space']> &
-  LayoutProps &
-  TypographyProps<Theme['fontFamilies'], Theme['fontWeights'], Theme['colors']> &
-  BackgroundColorProps<Theme['colors']> &
-  FlexProps &
-  GridProps<Theme['space']>
+type Props = HTMLAttributes<HTMLDivElement> & ThemeSystemProps<Theme> & {}
 
-const Box: FC<Props> = ({ children, className, ...rest }) => {
-  const classNames = [
-    ...bg(rest, theme),
-    ...flex(rest, theme),
-    ...grid(rest, theme),
-    ...layout(rest, theme),
-    ...position(rest, theme),
-    ...space(rest, theme),
-    ...typography(rest, theme),
-  ]
-  return <div className={cx(...classNames, className)}>{children}</div>
-}
+const Box = React.forwardRef<HTMLDivElement, Props>(({ className, children, ...props }, ref) => {
+  return (
+    <div className={cx(className, parseAll(props))} ref={ref} {...filterProps(props)}>
+      {children}
+    </div>
+  )
+})
 
 export default Box
 ```
 
-> To ensure type safety, make sure you export the type of your Theme like so: `export type Theme = typeof theme`
+In this example, the `filterProps` helper removes all theme system related props from the object, preventing your div having html attributes like `color` or `height` in the DOM.
 
-Given that `theme.ratio["0"]` exists using `<Box mt="0"></Box>` would render `<div className="mt-0"></div>`.
+Using the Box component, a component that looks like this:
 
-### Media queries
-
-Equal to styled-system you can use media queries like so: `<Box mt={{_: "0", lg: "2"}}/>`. Use the `_` key for your initial styles, the following keys (like `lg`) has to match the keys of `theme.breakpoints`. You'll receive a warning in development if it doens't.
-
-### Filter props
-
-To prevent props being passed on to the DOM you can use the `filterProps` utility, which will remove any theme-system props from a props object.
-
-```typescript
-import {filterProps} from 'theme-system'
-
-const Text: FC<Props> = ({
-  children,
-  className,
-  ...rest
-}) => {
-  const classNames = [
-    ...space(rest, theme),
-    ...typography(rest, theme),
-    className
-  ];
-
-  return (
-    <p className={cx(...classNames)} {...filterProps(rest)}>
-      {children}
-    </p>
-  );
-};
+```jsx
+<Box color="primary" fontSize="large" fontFamily={{ _: 'body', md: 'heading' }}>Using a Box component</Box>
 ```
+
+Will render output like this:
+
+```html
+<div class="font-family-body md-font-family-heading font-size-large color-primary">Using parse</div>
+```
+
+## Class names in production
+
+> Important: the classnames are hashed in production, don't use them directly.
+
+## API
+
+This needs a little more documentation work but these props are enabled:
+
+### SpaceProps
+
+| Prop |    Value    |
+| ---- | :---------: |
+| mt   | theme.space |
+| mr   | theme.space |
+| mb   | theme.space |
+| ml   | theme.space |
+| mx   | theme.space |
+| my   | theme.space |
+| m    | theme.space |
+| pt   | theme.space |
+| pr   | theme.space |
+| pb   | theme.space |
+| pl   | theme.space |
+| px   | theme.space |
+| py   | theme.space |
+| p    | theme.space |
+
+### DisplayProps
+
+| Prop      |                                Value                                 |
+| --------- | :------------------------------------------------------------------: |
+| display   | 'inline', 'block', 'flex', 'grid', 'inline-block', 'none', 'initial' |
+| width     |                      '100%' , 'auto' , 'screen'                      |
+| minWidth  |                      '100%' , 'auto' , 'screen'                      |
+| height    |                      '100%' , 'auto' , 'screen'                      |
+| minHeight |                      '100%' , 'auto' , 'screen'                      |
+
+### TypographyProps
+
+| Prop       |           Value           |
+| ---------- | :-----------------------: |
+| fontFamily |    theme.fontFamilies     |
+| fontWeight |     theme.fontWeights     |
+| fontSize   |      theme.fontSizes      |
+| color      |       theme.colors        |
+| textAlign  | 'left', 'center', 'right' |
+
+### BackgroundColorProps
+
+| Prop |    Value     |
+| ---- | :----------: |
+| bg   | theme.colors |
+
+### FlexProps
+
+| Prop           |                                Value                                |
+| -------------- | :-----------------------------------------------------------------: |
+| alignItems     |                 'center', 'flex-start', 'flex-end'                  |
+| justifyContent | 'center', 'flex-start', 'flex-end', 'space-between', 'space-around' |
+| flexWrap       |                       'wrap' ,'wrap-reverse'                        |
+
+### GridProps
+
+| Prop            |                                Value                                 |
+| --------------- | :------------------------------------------------------------------: |
+| gridColumnStart | '1','2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'auto' |
+| gridColumnEnd   | '1','2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'auto' |
+| gridColumn      | '1','2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'auto' |
 
 ## Contributing
 

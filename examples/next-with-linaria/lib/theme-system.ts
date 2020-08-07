@@ -24,9 +24,6 @@ export const theme = {
     primary: '#236FEA',
     info: '#258AE7',
     success: '#27C62D',
-    warning: '#F03738',
-    alert: '#F49019',
-    white: '#fff',
   },
 }
 

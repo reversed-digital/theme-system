@@ -101,20 +101,6 @@ export type FlexProps = {
 /**
  * Grid
  */
-export type GridTemplateColumnsProperty =
-  | '1'
-  | '2'
-  | '3'
-  | '4'
-  | '5'
-  | '6'
-  | '7'
-  | '8'
-  | '9'
-  | '10'
-  | '11'
-  | '12'
-  | 'none'
 export type GridColumnProperty =
   | '1'
   | '2'
@@ -130,9 +116,7 @@ export type GridColumnProperty =
   | '12'
   | 'auto'
 
-export type GridProps<S> = {
-  gridTemplateColumns?: ResponsiveValue<GridTemplateColumnsProperty>
-  gridColumnGap?: ResponsiveValue<keyof S>
+export type GridProps = {
   gridColumnStart?: ResponsiveValue<GridColumnProperty>
   gridColumnEnd?: ResponsiveValue<GridColumnProperty>
   gridColumn?: ResponsiveValue<GridColumnProperty>
