@@ -1,14 +1,6 @@
 import { generateClassNamesFromArray } from './lib/generate-class-names'
 import { parseClassNames } from './lib/parse-class-names'
-import {
-  AlignItemsProperty,
-  CSSProperties,
-  FlexWrapProperty,
-  JustifyContentProperty,
-  Theme,
-} from './types'
-import mergeDeep from './lib/merge-deep'
-import { validateProp } from 'lib/validate-props'
+import { AlignItemsProperty, FlexWrapProperty, JustifyContentProperty, Theme } from './types'
 
 const alignItems: AlignItemsProperty[] = ['flex-start', 'center', 'flex-end']
 const justifyContent: JustifyContentProperty[] = [
@@ -20,45 +12,37 @@ const justifyContent: JustifyContentProperty[] = [
 ]
 const wrap: FlexWrapProperty[] = ['wrap', 'wrap-reverse']
 
-export const generate = (theme: Theme): CSSProperties => {
-  let styles: CSSProperties = {}
-  styles = mergeDeep(
-    styles,
-    generateClassNamesFromArray({
+export const generate = (theme: Theme): string => {
+  let styles = `
+    ${generateClassNamesFromArray({
       property: 'align-items',
       values: alignItems,
       breakpoints: theme.breakpoints,
-    })
-  )
-  styles = mergeDeep(
-    styles,
-    generateClassNamesFromArray({
+    })}
+    ${generateClassNamesFromArray({
       property: 'justify-content',
       values: justifyContent,
       breakpoints: theme.breakpoints,
-    })
-  )
-  styles = mergeDeep(
-    styles,
-    generateClassNamesFromArray({
+    })}
+    ${generateClassNamesFromArray({
       property: 'flex-wrap',
       values: wrap,
       breakpoints: theme.breakpoints,
-    })
-  )
+    })}}
+  `
   return styles
 }
 
-export function parse(props: any, theme: Theme): string[] {
-  let classNames: any[] = []
+export function parse(props: any, theme: Theme): string {
+  let classNames = ''
   if (props.alignItems) {
-    classNames.push(parseClassNames('alignItems', props.alignItems, theme))
+    classNames += parseClassNames('alignItems', props.alignItems, theme) + ' '
   }
   if (props.justifyContent) {
-    classNames.push(parseClassNames('justifyContent', props.justifyContent, theme))
+    classNames += parseClassNames('justifyContent', props.justifyContent, theme) + ' '
   }
   if (props.flexWrap) {
-    classNames.push(parseClassNames('flexWrap', props.flexWrap, theme))
+    classNames += parseClassNames('flexWrap', props.flexWrap, theme) + ' '
   }
-  return classNames.flat()
+  return classNames.trimRight()
 }

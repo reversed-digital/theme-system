@@ -1,10 +1,9 @@
 import {
-  generateClassNamesFromObject,
   generateClassNamesFromArray,
+  generateClassNamesFromObject,
 } from './lib/generate-class-names'
 import { parseClassNames } from './lib/parse-class-names'
-import { CSSProperties, GridColumnProperty, GridTemplateColumnsProperty, Theme } from './types'
-import mergeDeep from './lib/merge-deep'
+import { GridColumnProperty, GridTemplateColumnsProperty, Theme } from './types'
 
 const gridTemplates: GridTemplateColumnsProperty[] = [
   '1',
@@ -56,67 +55,54 @@ for (const key of gridColumn) {
   }
 }
 
-export const generate = (theme: Theme): CSSProperties => {
-  let styles: CSSProperties = {}
-  styles = mergeDeep(
-    styles,
-    generateClassNamesFromObject({
-      property: 'grid-template-columns',
-      values: gridTemplateObject,
-      breakpoints: theme.breakpoints,
-    })
-  )
-  styles = mergeDeep(
-    styles,
-    generateClassNamesFromObject({
-      property: 'grid-column-gap',
-      values: theme.space,
-      breakpoints: theme.breakpoints,
-    })
-  )
-  styles = mergeDeep(
-    styles,
-    generateClassNamesFromArray({
-      property: 'grid-column-start',
-      values: gridColumn,
-      breakpoints: theme.breakpoints,
-    })
-  )
-  styles = mergeDeep(
-    styles,
-    generateClassNamesFromArray({
-      property: 'grid-column-end',
-      values: gridColumn,
-      breakpoints: theme.breakpoints,
-    })
-  )
-  styles = mergeDeep(
-    styles,
-    generateClassNamesFromObject({
-      property: 'grid-column',
-      values: gridColumnObject,
-      breakpoints: theme.breakpoints,
-    })
-  )
+export const generate = (theme: Theme): string => {
+  let styles = `
+  ${generateClassNamesFromObject({
+    property: 'grid-template-columns',
+    values: gridTemplateObject,
+    breakpoints: theme.breakpoints,
+  })}
+${generateClassNamesFromObject({
+  property: 'grid-column-gap',
+  values: theme.space,
+  breakpoints: theme.breakpoints,
+})}
+${generateClassNamesFromObject({
+  property: 'grid-column',
+  values: gridColumnObject,
+  breakpoints: theme.breakpoints,
+})}
+  ${generateClassNamesFromArray({
+    property: 'grid-column-start',
+    values: gridColumn,
+    breakpoints: theme.breakpoints,
+  })}
+${generateClassNamesFromArray({
+  property: 'grid-column-end',
+  values: gridColumn,
+  breakpoints: theme.breakpoints,
+})}
+  `
   return styles
 }
 
-export function parse(props: any, theme: Theme): string[] {
-  let classNames: any[] = []
+export function parse(props: any, theme: Theme): string {
+  let classNames = ''
   if (props.gridTemplateColumns) {
-    classNames.push(parseClassNames('grid-template-columns', props.gridTemplateColumns, theme))
+    classNames += parseClassNames('grid-template-columns', props.gridTemplateColumns, theme) + ' '
   }
   if (props.gridColumnGap) {
-    classNames.push(parseClassNames('grid-column-gap', props.gridColumnGap, theme))
+    classNames += parseClassNames('grid-column-gap', props.gridColumnGap, theme) + ' '
   }
   if (props.gridColumnStart) {
-    classNames.push(parseClassNames('grid-column-start', props.gridColumnStart, theme))
+    classNames += parseClassNames('grid-column-start', props.gridColumnStart, theme) + ' '
   }
   if (props.gridColumnEnd) {
-    classNames.push(parseClassNames('grid-column-end', props.gridColumnEnd, theme))
+    classNames += parseClassNames('grid-column-end', props.gridColumnEnd, theme) + ' '
   }
   if (props.gridColumn) {
-    classNames.push(parseClassNames('grid-column', props.gridColumn, theme))
+    classNames += parseClassNames('grid-column', props.gridColumn, theme) + ' '
   }
-  return classNames.flat()
+
+  return classNames.trimRight()
 }

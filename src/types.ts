@@ -7,6 +7,7 @@ export type Theme = {
   breakpoints: ThemeProperty
   fontWeights: ThemeProperty
   fontFamilies: ThemeProperty
+  fontSizes: ThemeProperty
   space: ThemeProperty
   colors: ThemeProperty
 }
@@ -65,9 +66,10 @@ export type LayoutProps = {
  * Typograhpy
  */
 export type TextAlignProperty = 'left' | 'center' | 'right'
-export type TypographyProps<Families, Weights, Colors> = {
+export type TypographyProps<Families, Weights, Sizes, Colors> = {
   fontFamily?: ResponsiveValue<keyof Families>
   fontWeight?: ResponsiveValue<keyof Weights>
+  fontSize?: ResponsiveValue<keyof Sizes>
   color?: ResponsiveValue<keyof Colors>
   textAlign?: ResponsiveValue<TextAlignProperty>
 }

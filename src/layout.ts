@@ -1,10 +1,9 @@
 import {
-  generateClassNamesFromObject,
   generateClassNamesFromArray,
+  generateClassNamesFromObject,
 } from './lib/generate-class-names'
 import { parseClassNames } from './lib/parse-class-names'
-import { CSSProperties, Theme, DisplayProperty } from './types'
-import mergeDeep from './lib/merge-deep'
+import { DisplayProperty, Theme } from './types'
 
 const display: DisplayProperty[] = ['block', 'flex', 'grid', 'initial', 'inline', 'inline-block']
 const sizesHorizontal = {
@@ -18,67 +17,54 @@ const sizesVertical = {
   auto: 'auto',
 }
 
-export const generate = (theme: Theme): CSSProperties => {
-  let styles: CSSProperties = {}
-  styles = mergeDeep(
-    styles,
-    generateClassNamesFromArray({
-      property: 'display',
-      values: display,
-      breakpoints: theme.breakpoints,
-    })
-  )
-  styles = mergeDeep(
-    styles,
-    generateClassNamesFromObject({
+export const generate = (theme: Theme): string => {
+  const styles = `
+    ${generateClassNamesFromObject({
       property: 'width',
       values: sizesHorizontal,
       breakpoints: theme.breakpoints,
-    })
-  )
-  styles = mergeDeep(
-    styles,
-    generateClassNamesFromObject({
+    })}
+    ${generateClassNamesFromObject({
       property: 'min-width',
       values: sizesHorizontal,
       breakpoints: theme.breakpoints,
-    })
-  )
-  styles = mergeDeep(
-    styles,
-    generateClassNamesFromObject({
+    })}
+    ${generateClassNamesFromObject({
       property: 'height',
       values: sizesVertical,
       breakpoints: theme.breakpoints,
-    })
-  )
-  styles = mergeDeep(
-    styles,
-    generateClassNamesFromObject({
+    })}
+    ${generateClassNamesFromObject({
       property: 'min-height',
       values: sizesVertical,
       breakpoints: theme.breakpoints,
-    })
-  )
+    })}
+    ${generateClassNamesFromArray({
+      property: 'display',
+      values: display,
+      breakpoints: theme.breakpoints,
+    })}
+  `
   return styles
 }
 
-export function parse(props: any, theme: Theme): string[] {
-  let classNames: any[] = []
+export function parse(props: any, theme: Theme): string {
+  let classNames = ''
   if (props.display) {
-    classNames.push(parseClassNames('display', props.display, theme))
+    classNames += parseClassNames('display', props.display, theme) + ' '
   }
   if (props.width) {
-    classNames.push(parseClassNames('width', props.width, theme))
+    classNames += parseClassNames('width', props.width, theme) + ' '
   }
   if (props.minWidth) {
-    classNames.push(parseClassNames('min-width', props.minWidth, theme))
+    classNames += parseClassNames('min-width', props.minWidth, theme) + ' '
   }
   if (props.height) {
-    classNames.push(parseClassNames('height', props.height, theme))
+    classNames += parseClassNames('height', props.height, theme) + ' '
   }
   if (props.minHeight) {
-    classNames.push(parseClassNames('min-height', props.minHeight, theme))
+    classNames += parseClassNames('min-height', props.minHeight, theme) + ' '
   }
-  return classNames.flat()
+
+  return classNames.trimRight()
 }

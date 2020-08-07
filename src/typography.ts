@@ -3,62 +3,62 @@ import {
   generateClassNamesFromObject,
 } from './lib/generate-class-names'
 import { parseClassNames } from './lib/parse-class-names'
-import { validateProp } from './lib/validate-props'
-import { CSSProperties, Theme, TextAlignProperty } from './types'
-import mergeDeep from './lib/merge-deep'
+import { TextAlignProperty, Theme } from './types'
 
 const textAlign: TextAlignProperty[] = ['left', 'center', 'right']
 
-export const generate = (theme: Theme): CSSProperties => {
-  let styles: CSSProperties = {}
-  styles = mergeDeep(
-    styles,
-    generateClassNamesFromObject({
-      property: 'font-weight',
-      values: theme.fontWeights,
-      breakpoints: theme.breakpoints,
-    })
-  )
-  styles = mergeDeep(
-    styles,
-    generateClassNamesFromObject({
-      property: 'font-family',
-      values: theme.fontFamilies,
-      breakpoints: theme.breakpoints,
-    })
-  )
-  styles = mergeDeep(
-    styles,
-    generateClassNamesFromArray({
-      property: 'text-align',
-      values: textAlign,
-      breakpoints: theme.breakpoints,
-    })
-  )
-  styles = mergeDeep(
-    styles,
-    generateClassNamesFromObject({
+export const generate = (theme: Theme): string => {
+  let styles: string = `
+    ${generateClassNamesFromObject({
       property: 'color',
       values: theme.colors,
       breakpoints: theme.breakpoints,
-    })
-  )
+    })}
+    ${generateClassNamesFromObject({
+      property: 'font-weight',
+      values: theme.fontWeights,
+      breakpoints: theme.breakpoints,
+    })}
+    ${generateClassNamesFromObject({
+      property: 'font-family',
+      values: theme.fontFamilies,
+      breakpoints: theme.breakpoints,
+    })}
+    ${generateClassNamesFromObject({
+      property: 'font-size',
+      values: theme.fontSizes,
+      breakpoints: theme.breakpoints,
+    })}
+    ${generateClassNamesFromObject({
+      property: 'color',
+      values: theme.colors,
+      breakpoints: theme.breakpoints,
+    })}
+    ${generateClassNamesFromArray({
+      property: 'text-align',
+      values: textAlign,
+      breakpoints: theme.breakpoints,
+    })}
+  `
   return styles
 }
 
-export function parse(props: any, theme: Theme): string[] {
-  let classNames: any[] = []
+export function parse(props: any, theme: Theme): string {
+  let classNames = ''
   if (props.fontWeight) {
-    classNames.push(parseClassNames('font-weight', props.fontWeight, theme))
+    classNames += parseClassNames('font-weight', props.fontWeight, theme) + ' '
   }
   if (props.fontFamily) {
-    classNames.push(parseClassNames('font-family', props.fontFamily, theme))
+    classNames += parseClassNames('font-family', props.fontFamily, theme) + ' '
+  }
+  if (props.fontSize) {
+    classNames += parseClassNames('font-size', props.fontSize, theme) + ' '
   }
   if (props.textAlign) {
-    classNames.push(parseClassNames('text-align', props.textAlign, theme))
+    classNames += parseClassNames('text-align', props.textAlign, theme) + ' '
   }
   if (props.color) {
-    classNames.push(parseClassNames('color', props.color, theme))
+    classNames += parseClassNames('color', props.color, theme) + ' '
   }
-  return classNames.flat()
+  return classNames.trimRight()
 }

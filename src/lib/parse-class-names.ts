@@ -1,30 +1,27 @@
-import { propertyToPrefix } from './property-to-prefix'
-import { validateProp } from './validate-props'
-import { Theme } from 'types'
+import { getClassName } from './get-class-name'
 
-const removeSpecials = (key: string | number) =>
-  typeof key === 'string' ? key.replace(/[^\w\s]/gi, '') : key
-
-const getClassName = (property: string, key: string | number, breakpointKey?: string): string =>
-  `${[propertyToPrefix[property] || property, breakpointKey, removeSpecials(key)]
-    .filter((t) => t)
-    .join('-')}`
-
-export function parseClassNames(property: string, prop: any, theme: Theme): string[] {
+let breakpoints: string[] | null = null
+export function parseClassNames(property: string, prop: any, theme: any): string {
   if (typeof prop === 'string') {
-    return [getClassName(property, prop)]
+    return getClassName(property, prop)
   } else {
-    if (__DEV__) {
-      validateProp('justifyContent', prop, theme)
-    }
     let classnames: string[] = []
-    Object.keys(prop).forEach((breakpointKey) => {
+    if (!breakpoints) {
+      breakpoints = Object.keys(theme.breakpoints)
+    }
+    for (const breakpointKey in prop) {
       if (breakpointKey === '_') {
         classnames.push(getClassName(property, prop[breakpointKey]))
-      } else {
+      } else if (breakpoints.includes(breakpointKey)) {
         classnames.push(getClassName(property, prop[breakpointKey], breakpointKey))
+      } else {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn(
+            `You've use '${breakpointKey}' as a breakpoint key but it's not defined in your theme. Classname mapping is ignored for this value`
+          )
+        }
       }
-    })
-    return classnames
+    }
+    return classnames.join(' ')
   }
 }

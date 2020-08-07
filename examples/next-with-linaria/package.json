@@ -8,12 +8,14 @@
     "start": "next start"
   },
   "dependencies": {
+    "linaria": "^2.0.0-alpha.1",
     "next": "9.5.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "theme-system": "file:./../../dist"
   },
   "devDependencies": {
-    "@types/react": "^16.9.44"
+    "@types/react": "^16.9.44",
+    "@zeit/next-css": "^1.0.1"
   }
 }

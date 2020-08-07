@@ -1,8 +1,24 @@
-import Head from 'next/head'
-// import styles from '../styles/Home.module.css'
-import { filterProps } from 'theme-system'
+import Box from '../components/Box'
+import { parse } from '../lib/theme-system'
 
 export default function Home() {
-  console.log(filterProps)
-  return <div>Example</div>
+  return (
+    <div>
+      <p
+        className={parse({
+          color: 'primary',
+          fontSize: 'large',
+          fontFamily: {
+            _: 'body',
+            md: 'heading',
+          },
+        })}
+      >
+        Using parse
+      </p>
+      <Box color="primary" fontSize="large" fontFamily={{ _: 'body', md: 'heading' }}>
+        Using a Box component
+      </Box>
+    </div>
+  )
 }

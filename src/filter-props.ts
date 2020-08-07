@@ -32,6 +32,7 @@ const props = [
   'p',
   'fontWeight',
   'fontFamily',
+  'fontSize',
   'textAlign',
   'color',
 ]
