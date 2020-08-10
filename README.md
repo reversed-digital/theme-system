@@ -2,19 +2,19 @@
 
 Theme system is a libary that combines the benefits of utility class libraries like [https://tailwindcss.com/](https://tailwindcss.com/) with the DX of css-in-js libraries like Styled Components or Emotion combined with styled-system.
 
-At [Reversed](https://www.thinkreversed.com) we make heavy use of both styled-components and styled-system. It offers a great DX but comes at a cost, since each `Box` component and `styled.div` call is adding bytes to the JS bundle and these styles are inserted during runtime. We've looked for alternatives and found [Linaria](https://linaria.now.sh/) which looks great. It's mainly the same API as styled-components, but extracts styles to static css. On the other hand we've looked at [https://tailwindcss.com/](https://tailwindcss.com/), which is gaining a lot of attention and rightfully so.
+At [Reversed](https://www.thinkreversed.com) we make heavy use of both styled-components and styled-system. It offers a great DX but comes at a cost, since each `Box` component and `styled.div` call adds bytes to the JS bundle and these styles are inserted during runtime. We've looked for alternatives and found [Linaria](https://linaria.now.sh/) which looks great. It's mainly the same API as styled-components, but extracts styles to static css. On the other hand we've looked at [https://tailwindcss.com/](https://tailwindcss.com/), which is gaining a lot of attention and rightfully so.
 
-We didn't want to lose our `Box` component though and wanted the freedom of our own design system. So we've build _Theme System_. Theme-System combines best of both worlds; it creates a fixed set of utility-clases for maximum reusability but with the DX of styled-system props.
+We didn't want to lose our `Box` component though and wanted the freedom of our own design system. So we've build Theme System. Theme-System combines best of both worlds; it creates a fixed set of utility-clases for maximum reusability with the DX of styled-system props.
 
 ## How to install
 
-Run `yarn add theme-system@next`
+Run `yarn add theme-system@latest`
 
 ## Get started
 
 For a working example with next.js & linaria, please check the examples folder.
 
-Create a theme system config file, for example `theme-system.ts`, inside this file, create the utility classes and parser using `createThemeSystem` function. The `createThemeSystem` function accepts a single theme object and return an object with three properties.
+Create a theme system config file, for example `theme-system.ts`, inside this file, create the utility classes and parser using the `createThemeSystem` function. The `createThemeSystem` function accepts a single theme object and return an object with three properties.
 
 Your theme object should look like this:
 
@@ -27,6 +27,8 @@ type Theme = {
   colors: { [key: string]: string | number }
 }
 ```
+
+Example:
 
 ```typescript
 // theme-system.ts
@@ -62,9 +64,11 @@ export type Theme = typeof theme
 export const { utilities, parse, parseAll } = createThemeSystem<Theme>(theme)
 ```
 
+> Note the `export type Theme  = typeof theme` line, this is needed to have typechecking on your theme object.
+
 The `utilities` property is a string containing the css with the utility classes, you should add this once inside your global css.
 
-The `parse` & `parseAll` functions are identical in implementation, but `parse` is strictly typed based on your theme and `parseAll` is loosely typed.
+The `parse` & `parseAll` functions are identical in implementation, but `parse` is strictly typed based on your theme.
 
 ## parse example
 
@@ -198,6 +202,11 @@ This needs a little more documentation work but these props are enabled:
 | gridColumnStart | '1','2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'auto' |
 | gridColumnEnd   | '1','2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'auto' |
 | gridColumn      | '1','2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'auto' |
+
+## Future plans
+
+- See if we can use purgeCSS to remove unused utilities
+- Investigate a babel-plugin to compile away the parse & parseAll calls
 
 ## Contributing
 
