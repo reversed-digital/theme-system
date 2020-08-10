@@ -36,13 +36,13 @@ export const generate = (theme: Theme): string => {
 export function parse(props: any, theme: Theme): string {
   let classNames = ''
   if (props.alignItems) {
-    classNames += parseClassNames('alignItems', props.alignItems, theme) + ' '
+    classNames += parseClassNames('align-items', props.alignItems, theme) + ' '
   }
   if (props.justifyContent) {
-    classNames += parseClassNames('justifyContent', props.justifyContent, theme) + ' '
+    classNames += parseClassNames('justify-Content', props.justifyContent, theme) + ' '
   }
   if (props.flexWrap) {
-    classNames += parseClassNames('flexWrap', props.flexWrap, theme) + ' '
+    classNames += parseClassNames('flex-wrap', props.flexWrap, theme) + ' '
   }
   return classNames.trimRight()
 }
