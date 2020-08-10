@@ -39,7 +39,7 @@ export function parse(props: any, theme: Theme): string {
     classNames += parseClassNames('align-items', props.alignItems, theme) + ' '
   }
   if (props.justifyContent) {
-    classNames += parseClassNames('justify-Content', props.justifyContent, theme) + ' '
+    classNames += parseClassNames('justify-content', props.justifyContent, theme) + ' '
   }
   if (props.flexWrap) {
     classNames += parseClassNames('flex-wrap', props.flexWrap, theme) + ' '
