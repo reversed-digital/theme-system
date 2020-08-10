@@ -46,7 +46,7 @@ export type ThemeSystemProps<T extends Theme> = PositionProps &
   TypographyProps<T['fontFamilies'], T['fontWeights'], T['fontSizes'], T['colors']> &
   BackgroundColorProps<T['colors']> &
   FlexProps &
-  GridProps<T['space']>
+  GridProps
 
 function createParser<T>(theme): (props: T) => string {
   function parse(props: T) {
