@@ -11,7 +11,7 @@ export const generate = (theme: Theme): string =>
 
 export function parse(props: any, theme: Theme): string {
   if (props.bg) {
-    return parseClassNames('bg', props.bg, theme)
+    return parseClassNames('background-color', props.bg, theme)
   }
   return ''
 }
