@@ -64,7 +64,7 @@ export type Theme = typeof theme
 export const { utilities, parse, parseAll } = createThemeSystem<Theme>(theme)
 ```
 
-> Note the `export type Theme  = typeof theme` line, this is needed to have typechecking on your theme object.
+> Note the `export type Theme = typeof theme` line, this is needed to have typechecking on your theme object.
 
 The `utilities` property is a string containing the css with the utility classes, you should add this once inside your global css.
 
@@ -125,7 +125,9 @@ In this example, the `filterProps` helper removes all theme system related props
 Using the Box component, a component that looks like this:
 
 ```jsx
-<Box color="primary" fontSize="large" fontFamily={{ _: 'body', md: 'heading' }}>Using a Box component</Box>
+<Box color="primary" fontSize="large" fontFamily={{ _: 'body', md: 'heading' }}>
+  Using a Box component
+</Box>
 ```
 
 Will render output like this:
@@ -205,6 +207,7 @@ This needs a little more documentation work but these props are enabled:
 
 ## Future plans
 
+- Re-add some form of a default grid system
 - See if we can use purgeCSS to remove unused utilities
 - Investigate a babel-plugin to compile away the parse & parseAll calls
 
