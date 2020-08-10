@@ -41,7 +41,7 @@ type Object = {
 }
 
 export type ThemeSystemProps<T extends Theme> = PositionProps &
-  SpaceProps<T['colors']> &
+  SpaceProps<T['space']> &
   LayoutProps &
   TypographyProps<T['fontFamilies'], T['fontWeights'], T['fontSizes'], T['colors']> &
   BackgroundColorProps<T['colors']> &
