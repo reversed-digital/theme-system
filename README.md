@@ -207,7 +207,8 @@ This needs a little more documentation work but these props are enabled:
 
 ## Future plans
 
-- Re-add some form of a default grid system
+- Add some form of a default grid system
+- Allow variants
 - See if we can use purgeCSS to remove unused utilities
 - Investigate a babel-plugin to compile away the parse & parseAll calls
 
