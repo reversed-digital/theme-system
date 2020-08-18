@@ -28,7 +28,7 @@ export const generate = (theme: Theme): string => {
       property: 'flex-wrap',
       values: wrap,
       breakpoints: theme.breakpoints,
-    })}}
+    })}
   `
   return styles
 }
