@@ -80,7 +80,11 @@ export function generateClassNamesFromObject<Values>({
 
 export function generateSpaceProperty({ prefix, properties, values, breakpoints }: any): string {
   let styles = ``
-  const valuesWithAuto = { ...values, auto: 'auto' }
+
+  const valuesWithAuto = ['mt', 'mr', 'mb', 'ml', 'mx', 'my', 'm'].includes(prefix)
+    ? { ...values, auto: 'auto' }
+    : values
+
   for (const key in valuesWithAuto) {
     const className = getClassName(prefix, key)
     for (const property of properties) {
