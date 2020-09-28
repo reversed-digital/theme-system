@@ -5,7 +5,15 @@ import {
 import { parseClassNames } from './lib/parse-class-names'
 import { DisplayProperty, Theme } from './types'
 
-const display: DisplayProperty[] = ['block', 'flex', 'grid', 'initial', 'inline', 'inline-block']
+const display: DisplayProperty[] = [
+  'block',
+  'flex',
+  'grid',
+  'initial',
+  'inline',
+  'inline-block',
+  'none',
+]
 const sizesHorizontal = {
   '100': '100%',
   screen: '100vw',
