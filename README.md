@@ -101,10 +101,6 @@ The `parse` function is strictly typed, so passing in invalid properties will re
 
 The `parseAll` function allows you to pass in a props object without strict type checking. This allows you to build custom components with typechecking on their props and passing a complete props object to `parseAll`, generating the right class names. A Box component example:
 
-## Additional class names
-
-Both `parse` & `parseAll` support passing an additional classname or as the second argument. For example: `parse({color:primary}, 'additional-class')` will output `color-primary additional-class`.
-
 ```typescript
 import React, { FC, HTMLAttributes } from 'react'
 import { ThemeSystemProps, filterProps } from 'theme-system'
@@ -139,6 +135,10 @@ Will render output like this:
 ```html
 <div class="font-family-body md-font-family-heading font-size-large color-primary">Using parse</div>
 ```
+
+## Additional class names
+
+Both `parse` & `parseAll` support passing an additional classname or as the second argument. For example: `parse({color:primary}, 'additional-class')` will output `color-primary additional-class`.
 
 ## Class names in production
 
