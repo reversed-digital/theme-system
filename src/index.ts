@@ -48,8 +48,8 @@ export type ThemeSystemProps<T extends Theme> = PositionProps &
   FlexProps &
   GridProps
 
-function createParser<T>(theme): (props: T) => string {
-  function parse(props: T) {
+function createParser<T>(theme): (props: T, additionalClassName?: string) => string {
+  function parse(props: T, additionalClassName?: string) {
     return [
       space(props, theme),
       typography(props, theme),
@@ -58,8 +58,9 @@ function createParser<T>(theme): (props: T) => string {
       layout(props, theme),
       position(props, theme),
       grid(props, theme),
+      additionalClassName,
     ]
-      .filter((s) => s.length)
+      .filter((s) => s && s.length)
       .join(' ')
       .trim()
   }
