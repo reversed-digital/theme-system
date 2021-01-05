@@ -6,7 +6,6 @@ import { generate as positionGenerator, parse as position } from './position'
 import { generate as gridGenerator, parse as grid } from './grid'
 import { generate as spaceGenerator, parse as space } from './space'
 import {
-  ResponsiveValue,
   Theme,
   PositionProps,
   SpaceProps,

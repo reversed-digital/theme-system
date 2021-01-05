@@ -1,6 +1,6 @@
 import { generateClassNamesFromArray } from './lib/generate-class-names'
 import { parseClassNames } from './lib/parse-class-names'
-import { CSSProperties, PositionProperty, Theme } from './types'
+import { PositionProperty, Theme } from './types'
 
 const position: PositionProperty[] = ['relative', 'absolute', 'fixed']
 

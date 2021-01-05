@@ -1,4 +1,4 @@
-import { CSSProperties, ThemeProperty } from 'types'
+import { ThemeProperty } from 'types'
 import { getClassName } from './get-class-name'
 
 export const getMediaQuery = (size: string | number): string =>
