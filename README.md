@@ -201,17 +201,8 @@ This needs a little more documentation work but these props are enabled:
 | justifyContent | 'center', 'flex-start', 'flex-end', 'space-between', 'space-around' |
 | flexWrap       |                       'wrap' ,'wrap-reverse'                        |
 
-### GridProps
-
-| Prop            |                                Value                                 |
-| --------------- | :------------------------------------------------------------------: |
-| gridColumnStart | '1','2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'auto' |
-| gridColumnEnd   | '1','2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'auto' |
-| gridColumn      | '1','2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'auto' |
-
 ## Future plans
 
-- Add some form of a default grid system
 - Allow variants
 - See if we can use purgeCSS to remove unused utilities
 - Investigate a babel-plugin to compile away the parse & parseAll calls

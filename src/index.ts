@@ -3,7 +3,6 @@ import { generate as backgroundGenerator, parse as bg } from './bg'
 import { generate as flexGenerator, parse as flex } from './flex'
 import { generate as layoutGenerator, parse as layout } from './layout'
 import { generate as positionGenerator, parse as position } from './position'
-import { generate as gridGenerator, parse as grid } from './grid'
 import { generate as spaceGenerator, parse as space } from './space'
 import {
   Theme,
@@ -13,7 +12,6 @@ import {
   TypographyProps,
   BackgroundColorProps,
   FlexProps,
-  GridProps,
 } from './types'
 
 export { filterProps } from './filter-props'
@@ -30,7 +28,6 @@ export const generator = (theme: any): string => {
     ${flexGenerator(theme)}
     ${layoutGenerator(theme)}
     ${positionGenerator(theme)}
-    ${gridGenerator(theme)}
   `
   return utilities
 }
@@ -44,8 +41,7 @@ export type ThemeSystemProps<T extends Theme> = PositionProps &
   LayoutProps &
   TypographyProps<T['fontFamilies'], T['fontWeights'], T['fontSizes'], T['colors']> &
   BackgroundColorProps<T['colors']> &
-  FlexProps &
-  GridProps
+  FlexProps
 
 function createParser<T>(theme): (props: T, additionalClassName?: string) => string {
   function parse(props: T, additionalClassName?: string) {
@@ -56,7 +52,6 @@ function createParser<T>(theme): (props: T, additionalClassName?: string) => str
       flex(props, theme),
       layout(props, theme),
       position(props, theme),
-      grid(props, theme),
       additionalClassName,
     ]
       .filter((s) => s && s.length)

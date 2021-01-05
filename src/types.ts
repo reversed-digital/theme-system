@@ -97,27 +97,3 @@ export type FlexProps = {
   justifyContent?: ResponsiveValue<JustifyContentProperty>
   flexWrap?: ResponsiveValue<FlexWrapProperty>
 }
-
-/**
- * Grid
- */
-export type GridColumnProperty =
-  | '1'
-  | '2'
-  | '3'
-  | '4'
-  | '5'
-  | '6'
-  | '7'
-  | '8'
-  | '9'
-  | '10'
-  | '11'
-  | '12'
-  | 'auto'
-
-export type GridProps = {
-  gridColumnStart?: ResponsiveValue<GridColumnProperty>
-  gridColumnEnd?: ResponsiveValue<GridColumnProperty>
-  gridColumn?: ResponsiveValue<GridColumnProperty>
-}
