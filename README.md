@@ -198,6 +198,7 @@ This needs a little more documentation work but these props are enabled:
 | Prop           |                                Value                                |
 | -------------- | :-----------------------------------------------------------------: |
 | alignItems     |                 'center', 'flex-start', 'flex-end'                  |
+| flexDirection  |          'row', 'row-reverse', 'column', 'column-reverse'           |
 | justifyContent | 'center', 'flex-start', 'flex-end', 'space-between', 'space-around' |
 | flexWrap       |                       'wrap' ,'wrap-reverse'                        |
 

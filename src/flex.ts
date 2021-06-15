@@ -1,8 +1,9 @@
 import { generateClassNamesFromArray } from './lib/generate-class-names'
 import { parseClassNames } from './lib/parse-class-names'
-import { AlignItemsProperty, FlexWrapProperty, JustifyContentProperty, Theme } from './types'
+import { AlignItemsProperty, FlexWrapProperty, JustifyContentProperty, Theme, FlexDirectionProperty } from './types'
 
 const alignItems: AlignItemsProperty[] = ['flex-start', 'center', 'flex-end']
+const flexDirection: FlexDirectionProperty[] = ['row', 'row-reverse', 'column', 'column-reverse']
 const justifyContent: JustifyContentProperty[] = [
   'flex-start',
   'center',
@@ -17,6 +18,11 @@ export const generate = (theme: Theme): string => {
     ${generateClassNamesFromArray({
       property: 'align-items',
       values: alignItems,
+      breakpoints: theme.breakpoints,
+    })}
+    ${generateClassNamesFromArray({
+      property: 'flex-direction',
+      values: flexDirection,
       breakpoints: theme.breakpoints,
     })}
     ${generateClassNamesFromArray({
@@ -37,6 +43,9 @@ export function parse(props: any, theme: Theme): string {
   let classNames = ''
   if (props.alignItems) {
     classNames += parseClassNames('align-items', props.alignItems, theme) + ' '
+  }
+  if (props.flexDirection) {
+    classNames += parseClassNames('flex-direction', props.flexDirection, theme) + ' '
   }
   if (props.justifyContent) {
     classNames += parseClassNames('justify-content', props.justifyContent, theme) + ' '

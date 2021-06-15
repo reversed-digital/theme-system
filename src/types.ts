@@ -84,6 +84,7 @@ export type BackgroundColorProps<C> = {
 /**
  * Flex
  */
+export type FlexDirectionProperty = 'row' | 'row-reverse' | 'column' | 'column-reverse'
 export type AlignItemsProperty = 'center' | 'flex-start' | 'flex-end'
 export type JustifyContentProperty =
   | 'center'
@@ -94,6 +95,7 @@ export type JustifyContentProperty =
 export type FlexWrapProperty = 'wrap' | 'wrap-reverse'
 export type FlexProps = {
   alignItems?: ResponsiveValue<AlignItemsProperty>
+  flexDirection?: ResponsiveValue<FlexDirectionProperty>
   justifyContent?: ResponsiveValue<JustifyContentProperty>
   flexWrap?: ResponsiveValue<FlexWrapProperty>
 }
