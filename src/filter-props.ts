@@ -3,6 +3,7 @@ import memoize from './lib/memoize'
 const props = [
   'bg',
   'alignItems',
+  'flexDirection',
   'justifyContent',
   'flexWrap',
   'gridTemplateColumns',
